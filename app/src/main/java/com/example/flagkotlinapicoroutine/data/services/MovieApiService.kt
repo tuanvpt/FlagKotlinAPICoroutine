@@ -4,20 +4,14 @@ import com.example.flagkotlinapicoroutine.BuildConfig
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class MovieApiService {
+object MovieApiService {
 
-    companion object {
-        private var retrofit: Retrofit? = null
-
-        fun getInstance(): Retrofit {
-            if (retrofit == null) {
-                retrofit = Retrofit.Builder()
-                    .baseUrl(BuildConfig.BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
-            }
-            return retrofit!!
-        }
+    fun getMovieService(): MovieApiInterface {
+        return Retrofit.Builder()
+            .baseUrl(BuildConfig.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(MovieApiInterface::class.java)
     }
 
 }

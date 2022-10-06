@@ -1,66 +1,75 @@
 package com.example.flagkotlinapicoroutine.view
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.flagkotlinapicoroutine.data.services.MovieApiInterface
-import com.example.flagkotlinapicoroutine.data.services.MovieApiService
 import com.example.flagkotlinapicoroutine.databinding.ActivityMainBinding
-import com.example.flagkotlinapicoroutine.data.model.Movie
-import com.example.flagkotlinapicoroutine.data.model.reponse.MovieResponse
 import com.example.flagkotlinapicoroutine.viewmodel.ListViewModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: ListViewModel
 
-    /*private val countriesAdapter = MovieListAdapter(arrayListOf())*/
     private lateinit var binding: ActivityMainBinding
+    private val moviesAdapter = MovieListAdapter(arrayListOf())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var binding: ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         viewModel = ViewModelProvider(this)[ListViewModel::class.java]
+
+
 
         binding.rvMovie.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             setHasFixedSize(true)
-            getMovieData { movies: List<Movie> ->
-                this.adapter = MovieListAdapter(movies as ArrayList<Movie>)
-            }
+            adapter = moviesAdapter
 
         }
 
-
+        registerLiveData()
     }
 
-    private fun getMovieData(callback: (List<Movie>) -> Unit) {
-        val apiService = MovieApiService.getInstance().create(MovieApiInterface::class.java)
+    /*   private fun getMovieData(callback: (List<Movie>) -> Unit) {
+           val apiService = MovieApiService.getInstance().create(MovieApiInterface::class.java)
+           apiService.getMovieList().enqueue(object : Callback<MovieResponse> {
+               override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
+                   return callback(response.body()!!.movies)
+               }
 
-        apiService.getMovieList().enqueue(object : Callback<MovieResponse> {
-            override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
-                return callback(response.body()!!.movies)
-            }
-
-            override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
-
-            }
-
-        })
-
-
-    }
+               override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
+               }
+           })
+       }*/
 
 
     private fun registerLiveData() {
 
+        viewModel.movies.observe(this) { movies ->
+            movies?.let {
+                binding.rvMovie.visibility = View.VISIBLE
+                moviesAdapter.updateMovies(it)
+            }
+        }
+
+        viewModel.movieLoadError.observe(this) { isError ->
+            binding.listError.visibility = if (isError == "") View.GONE else View.VISIBLE
+        }
+
+
+        viewModel.loading.observe(this) { isLoading ->
+            isLoading?.let {
+                binding.pbLoading.visibility = if (it) View.VISIBLE else View.GONE
+                if (it) {
+                    binding.rvMovie.visibility = View.GONE
+                    binding.rvMovie.visibility = View.GONE
+                }
+            }
+        }
 
     }
 

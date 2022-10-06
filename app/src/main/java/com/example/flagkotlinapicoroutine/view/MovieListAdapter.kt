@@ -8,28 +8,29 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flagkotlinapicoroutine.BuildConfig
 import com.example.flagkotlinapicoroutine.R
-import com.example.flagkotlinapicoroutine.Utils.loadImage
+import com.example.flagkotlinapicoroutine.Utils.exts.loadImage
 import com.example.flagkotlinapicoroutine.data.model.Movie
+import com.example.flagkotlinapicoroutine.data.model.reponse.MovieResponse
 
-class MovieListAdapter(var countries: ArrayList<Movie>) :
+class MovieListAdapter(var movies: ArrayList<Movie>) :
     RecyclerView.Adapter<MovieListAdapter.CountryViewHolder>() {
 
-/*    fun updateCountries(newCountry: List<Movie>) {
-        countries.clear()
-        countries.add(newCountry)
+    fun updateMovies(newCountry: List<Movie>) {
+        movies.clear()
+        movies.addAll(newCountry)
         notifyDataSetChanged()
-    }*/
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int) = CountryViewHolder(
-        LayoutInflater.from(parent.context).inflate(R.layout.item_country, parent, false)
+        LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false)
     )
 
     override fun onBindViewHolder(holder: CountryViewHolder, position: Int) {
-        holder.bind(countries[position])
+        holder.bind(movies[position])
     }
 
     override fun getItemCount(): Int {
-        return countries.size
+        return movies.size
     }
 
     class CountryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

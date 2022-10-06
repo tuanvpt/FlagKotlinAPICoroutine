@@ -2,14 +2,31 @@ package com.example.flagkotlinapicoroutine.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.flagkotlinapicoroutine.data.model.Movie
+import com.example.flagkotlinapicoroutine.data.model.reponse.MovieResponse
+import com.example.flagkotlinapicoroutine.data.services.MovieApiService
+import kotlinx.coroutines.*
+import retrofit2.Response
 
 class ListViewModel : ViewModel() {
 
 /*
     private val countries = MutableLiveData<Country>()
 */
-    private val countryLoadError = MutableLiveData<String?>()
-    private val loading = MutableLiveData<Boolean>()
+
+    val movieService = MovieApiService.getMovieService()
+    val movies = MutableLiveData<List<Movie>>()
+
+    val movieResponse = MutableLiveData<MovieResponse>()
+    val movieLoadError = MutableLiveData<String?>()
+    val loading = MutableLiveData<Boolean>()
+
+
+    private var job: Job? = null
+    private val exception = CoroutineExceptionHandler { _, throwable ->
+
+        onError("Exception ${throwable.localizedMessage}")
+    }
 
 
     fun refresh() {
@@ -19,21 +36,27 @@ class ListViewModel : ViewModel() {
     private fun fetchCountries() {
         loading.value = true
 
-/*        val dummyData = generateDummyCountries()
+        job = CoroutineScope(Dispatchers.IO + exception).launch {
+            val response: Response<MovieResponse> = movieService.getMovieList()
+            if (response.isSuccessful) {
+                movieResponse.value = response.body()
+                movieLoadError.value = null
+                loading.value = false
+            } else {
+                onError("Error:  ${response.message()}")
+            }
+        }
 
-        countries.value = dummyData*/
-        countryLoadError.value = ""
-        loading.value = false
     }
-
-
-
 
     private fun onError(message: String) {
-        countryLoadError.value = message
+        movieLoadError.value = message
         loading.value = false
     }
 
-
+    override fun onCleared() {
+        super.onCleared()
+        job?.cancel()
+    }
 
 }
