@@ -1,18 +1,14 @@
 package com.example.flagkotlinapicoroutine.view
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.databinding.library.baseAdapters.BR
 import androidx.recyclerview.widget.RecyclerView
-import com.example.flagkotlinapicoroutine.BuildConfig
-import com.example.flagkotlinapicoroutine.R
-import com.example.flagkotlinapicoroutine.Utils.exts.loadImage
 import com.example.flagkotlinapicoroutine.data.model.Movie
+import com.example.flagkotlinapicoroutine.databinding.ItemMovieBinding
 
-class MovieListAdapter(var countries: ArrayList<Movie>) :
-    RecyclerView.Adapter<MovieListAdapter.CountryViewHolder>() {
+class MovieListAdapter(var movies: ArrayList<Movie>) :
+    RecyclerView.Adapter<MovieListAdapter.MovieViewHolder>() {
 
 /*    fun updateCountries(newCountry: List<Movie>) {
         countries.clear()
@@ -20,28 +16,53 @@ class MovieListAdapter(var countries: ArrayList<Movie>) :
         notifyDataSetChanged()
     }*/
 
-    override fun onCreateViewHolder(parent: ViewGroup, p1: Int) = CountryViewHolder(
-        LayoutInflater.from(parent.context).inflate(R.layout.item_country, parent, false)
-    )
+/*
+    @BindingAdapter("poster")
+    fun loadImage(imgView: ImageView, url: String?) {
+        if (!url.isNullOrEmpty()) {
+            poster?.let {
+                val imgUri = it.toUri().buildUpon().scheme("https").build()
+                Glide.with(imgView.context)
+                    .load(imgUri)
+                    .apply(
+                        RequestOptions()
+                            .placeholder(R.drawable.loading_animation)
+                            .error(R.drawable.ic_broken_image))
+                    .into(imgView)
+            }
+        }
+    }
+*/
 
-    override fun onBindViewHolder(holder: CountryViewHolder, position: Int) {
-        holder.bind(countries[position])
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+
+        val listItemMovieBinding = ItemMovieBinding.inflate(inflater, parent, false)
+        return MovieViewHolder(listItemMovieBinding)
+
+    }
+
+
+    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
+        holder.bind(movies[position])
     }
 
     override fun getItemCount(): Int {
-        return countries.size
+        return movies.size
     }
 
-    class CountryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class MovieViewHolder(val binding: ItemMovieBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        private val imageView: ImageView = itemView.findViewById(R.id.imgPoster)
-        private val titleMovie: TextView = itemView.findViewById(R.id.tvTitle)
-        private val releaseMovie: TextView = itemView.findViewById(R.id.tvReleaseDate)
+        /*   private val imageView: ImageView = itemView.findViewById(R.id.imgPoster)
+           private val titleMovie: TextView = itemView.findViewById(R.id.tvTitle)
+           private val releaseMovie: TextView = itemView.findViewById(R.id.tvReleaseDate)*/
 
-        fun bind(movie: Movie) {
-            titleMovie.text = movie.title
+        fun bind(item: Movie) {
+/*            binding.tvTitle = item.title
             releaseMovie.text = movie.release
-            imageView.loadImage(BuildConfig.BASE_IMAGE + movie.poster)
+            imageView.loadImage(BuildConfig.BASE_IMAGE + movie.poster)*/
+            binding.setVariable(BR.movie, item)
+            binding.executePendingBindings();
         }
 
     }

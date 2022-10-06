@@ -4,11 +4,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.flagkotlinapicoroutine.data.model.Movie
+import com.example.flagkotlinapicoroutine.data.model.reponse.MovieResponse
 import com.example.flagkotlinapicoroutine.data.services.MovieApiInterface
 import com.example.flagkotlinapicoroutine.data.services.MovieApiService
 import com.example.flagkotlinapicoroutine.databinding.ActivityMainBinding
-import com.example.flagkotlinapicoroutine.data.model.Movie
-import com.example.flagkotlinapicoroutine.data.model.reponse.MovieResponse
 import com.example.flagkotlinapicoroutine.viewmodel.ListViewModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var binding: ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
 
