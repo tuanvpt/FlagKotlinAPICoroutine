@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flagkotlinapicoroutine.BuildConfig
 import com.example.flagkotlinapicoroutine.R
-import com.example.flagkotlinapicoroutine.Utils.loadImage
+import com.example.flagkotlinapicoroutine.Utils.exts.loadImage
 import com.example.flagkotlinapicoroutine.data.model.Movie
 
 class MovieListAdapter(var countries: ArrayList<Movie>) :
@@ -34,7 +34,7 @@ class MovieListAdapter(var countries: ArrayList<Movie>) :
 
     class CountryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private val imageView: ImageView = itemView.findViewById(R.id.imageView)
+        private val imageView: ImageView = itemView.findViewById(R.id.imgPoster)
         private val titleMovie: TextView = itemView.findViewById(R.id.tvTitle)
         private val releaseMovie: TextView = itemView.findViewById(R.id.tvReleaseDate)
 

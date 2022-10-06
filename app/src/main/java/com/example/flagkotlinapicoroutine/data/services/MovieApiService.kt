@@ -1,12 +1,13 @@
 package com.example.flagkotlinapicoroutine.data.services
 
 import com.example.flagkotlinapicoroutine.BuildConfig
+import okhttp3.Interceptor
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class MovieApiService {
+object MovieApiService {
 
-    companion object {
         private var retrofit: Retrofit? = null
 
         fun getInstance(): Retrofit {
@@ -17,7 +18,6 @@ class MovieApiService {
                     .build()
             }
             return retrofit!!
-        }
     }
 
 }

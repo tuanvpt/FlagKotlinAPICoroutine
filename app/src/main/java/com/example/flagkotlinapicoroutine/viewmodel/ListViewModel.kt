@@ -26,14 +26,9 @@ class ListViewModel : ViewModel() {
         loading.value = false
     }
 
-
-
-
     private fun onError(message: String) {
         countryLoadError.value = message
         loading.value = false
     }
-
-
 
 }

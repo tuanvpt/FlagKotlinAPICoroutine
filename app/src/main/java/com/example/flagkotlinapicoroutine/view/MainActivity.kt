@@ -37,8 +37,6 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
-
-
     }
 
     private fun getMovieData(callback: (List<Movie>) -> Unit) {
@@ -54,10 +52,7 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
-
-
     }
-
 
     private fun registerLiveData() {
 
